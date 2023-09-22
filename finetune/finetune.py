@@ -196,8 +196,8 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
-    # move load_dataset outside of this thing
-    dataset = args.dataset
+    # wish I could move load_dataset outside of this thing
+    dataset = load_dataset(args.dataset_name)
     train_data = dataset["train"]
     valid_data = dataset["test"]
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
