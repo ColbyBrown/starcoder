@@ -29,12 +29,12 @@ def main():
 
     if args.push_to_hub:
         print(f"Saving to hub ...")
-        model.push_to_hub(f"{args.base_model_name_or_path}-merged", use_temp_dir=False, private=True)
-        tokenizer.push_to_hub(f"{args.base_model_name_or_path}-merged", use_temp_dir=False, private=True)
+        model.push_to_hub(f"{args.merge_name}", use_temp_dir=False, private=True)
+        tokenizer.push_to_hub(f"{args.merge_name}", use_temp_dir=False, private=True)
     else:
-        model.save_pretrained(f"{args.base_model_name_or_path}-merged")
-        tokenizer.save_pretrained(f"{args.base_model_name_or_path}-merged")
-        print(f"Model saved to {args.base_model_name_or_path}-merged")
+        model.save_pretrained(f"{args.merge_name}")
+        tokenizer.save_pretrained(f"{args.merge_name}")
+        print(f"Model saved to {args.merge_name}")
 
 if __name__ == "__main__" :
     main()
