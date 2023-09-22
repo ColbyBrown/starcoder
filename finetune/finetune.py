@@ -90,7 +90,7 @@ def get_args():
     return parser.parse_args()
 
 
-def chars_token_ratio(dataset, tokenizer, input_column_name="prompt", output_column_name="completion", nb_examples=400):
+def chars_token_ratio(dataset, tokenizer, nb_examples=400):
     """
     Estimate the average number of characters per token in the dataset.
     """
@@ -150,9 +150,9 @@ class ConstantLengthDataset(IterableDataset):
         infinite=False,
         seq_length=1024,
         num_of_sequences=1024,
-        chars_per_token=3.6,
-        input_column_name="prompt",
-        output_column_name="completion"
+        chars_per_token=3.6
+        #input_column_name="prompt",
+        #output_column_name="completion"
     ):
         self.tokenizer = tokenizer
         self.concat_token_id = tokenizer.eos_token_id if tokenizer.eos_token_id is not None else args.eos_token_id
@@ -161,8 +161,8 @@ class ConstantLengthDataset(IterableDataset):
         self.infinite = infinite
         self.current_size = 0
         self.max_buffer_size = seq_length * chars_per_token * num_of_sequences
-        self.input_column_name = input_column_name
-        self.output_column_name = output_column_name
+        #self.input_column_name = input_column_name
+        #self.output_column_name = output_column_name
 
     def __iter__(self):
         iterator = iter(self.dataset)
@@ -202,7 +202,7 @@ def create_datasets(tokenizer, args):
     valid_data = dataset["test"]
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
-    chars_per_token = chars_token_ratio(train_data, tokenizer, args.input_column_name, args.output_column_name)
+    chars_per_token = chars_token_ratio(train_data, tokenizer)
     print(f"The character to token ratio of the dataset is: {chars_per_token:.2f}")
 
     train_dataset = ConstantLengthDataset(
@@ -210,18 +210,18 @@ def create_datasets(tokenizer, args):
         train_data,
         infinite=True,
         seq_length=args.seq_length,
-        chars_per_token=chars_per_token,
-        input_column_name=args.input_column_name,
-        output_column_name=args.output_column_name
+        chars_per_token=chars_per_token
+        #input_column_name=args.input_column_name,
+        #output_column_name=args.output_column_name
     )
     valid_dataset = ConstantLengthDataset(
         tokenizer,
         valid_data,
         infinite=False,
         seq_length=args.seq_length,
-        chars_per_token=chars_per_token,
-        input_column_name=args.input_column_name,
-        output_column_name=args.output_column_name
+        chars_per_token=chars_per_token
+        #input_column_name=args.input_column_name,
+        #output_column_name=args.output_column_name
     )
     return train_dataset, valid_dataset
 
