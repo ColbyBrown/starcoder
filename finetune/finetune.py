@@ -96,7 +96,7 @@ def chars_token_ratio(dataset, tokenizer, input_column_name="prompt", output_col
     """
     total_characters, total_tokens = 0, 0
     for _, example in tqdm(zip(range(nb_examples), iter(dataset)), total=nb_examples):
-        text = prepare_sample_text(example, input_column_name, output_column_name)
+        text = prepare_sample_text(example)
         total_characters += len(text)
         if tokenizer.is_fast:
             total_tokens += len(tokenizer(text).tokens())
@@ -173,7 +173,7 @@ class ConstantLengthDataset(IterableDataset):
                 if buffer_len >= self.max_buffer_size:
                     break
                 try:
-                    buffer.append(prepare_sample_text(next(iterator), self.input_column_name, self.output_column_name))
+                    buffer.append(prepare_sample_text(next(iterator)))
                     buffer_len += len(buffer[-1])
                 except StopIteration:
                     if self.infinite:
