@@ -196,23 +196,11 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
-    dataset = load_dataset(
-        args.dataset_name,
-        data_dir=args.subset,
-        #split=args.split,
-        use_auth_token=True,
-        num_proc=args.num_workers if not args.streaming else None,
-        streaming=args.streaming,
-    )
-    if args.streaming:
-        print("Loading the dataset in streaming mode")
-        valid_data = dataset.take(args.size_valid_set)
-        train_data = dataset.skip(args.size_valid_set)
-        train_data = train_data.shuffle(buffer_size=args.shuffle_buffer, seed=args.seed)
-    else:
-        train_data = dataset["train"]
-        valid_data = dataset["test"]
-        print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
+    # move load_dataset outside of this thing
+    dataset = args.dataset
+    train_data = dataset["train"]
+    valid_data = dataset["test"]
+    print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
     chars_per_token = chars_token_ratio(train_data, tokenizer, args.input_column_name, args.output_column_name)
     print(f"The character to token ratio of the dataset is: {chars_per_token:.2f}")
