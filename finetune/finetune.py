@@ -78,7 +78,7 @@ def get_args():
 
     parser.add_argument("--local_rank", type=int, default=0)
     parser.add_argument("--no_fp16", action="store_false")
-    parser.add_argument("--bf16", action="store_true", default=True)
+    parser.add_argument("--bf16", action="store_true")
     parser.add_argument("--no_gradient_checkpointing", action="store_false", default=False)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--num_workers", type=int, default=None)
