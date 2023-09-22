@@ -290,7 +290,8 @@ def run_training(args, train_data, val_data):
 
 
 def main(args):
-    tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_auth_token=True)
+    tokenizer = AutoTokenizer.from_pretrained(args.model_path, use_auth_token=True,
+                                             additional_special_tokens=["<|soss|>","<|sols|>","<|sot|>","<|eot|>","<|sost|>","<|eost|>","<|sol|>","<|eol|>","<|sor|>","<|eor|>","<|soopr|>","<|eoopr|>","<|soocr|>","<|eoss|>","<|eols|>","/n"])
     train_dataset, eval_dataset = create_datasets(tokenizer, args)
     run_training(args, train_dataset, eval_dataset)
 
