@@ -77,8 +77,8 @@ def get_args():
     parser.add_argument("--weight_decay", type=float, default=0.05)
 
     parser.add_argument("--local_rank", type=int, default=0)
-    parser.add_argument("--no_fp16", action="store_false")
-    parser.add_argument("--bf16", action="store_true")
+    parser.add_argument("--fp16", action="store_true", default=True)
+    parser.add_argument("--no_bf16", action="store_false")
     parser.add_argument("--no_gradient_checkpointing", action="store_false", default=False)
     parser.add_argument("--seed", type=int, default=0)
     parser.add_argument("--num_workers", type=int, default=None)
@@ -272,8 +272,8 @@ def run_training(args, train_data, val_data):
         warmup_steps=args.num_warmup_steps,
         gradient_accumulation_steps=args.gradient_accumulation_steps,
         gradient_checkpointing=not args.no_gradient_checkpointing,
-        fp16=not args.no_fp16,
-        bf16=args.bf16,
+        fp16=args.fp16,
+        bf16=not args.no_bf16,
         weight_decay=args.weight_decay,
         run_name="StarCoder-finetuned",
         report_to="wandb",
