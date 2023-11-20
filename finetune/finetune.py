@@ -124,10 +124,7 @@ def print_trainable_parameters(model):
 def prepare_sample_text(example):
     """Prepare the text from a sample of the dataset."""
     #text = f"Question: {example[input_column_name]}\n\nAnswer: {example[output_column_name]}"
-    if example['type'] == "text":
-        text = f"<|soss|><|sot|>{example['title']}<|eot|><|sost|>{example['selftext']}<|eost|>{example['comments']}<|eoss|><|endoftext|>"
-    else:
-        text = f"<|sols|><|sot|>{example['title']}<|eot|><|sol|>{example['linktext']}<|eol|>{example['comments']}<|eols|><|endoftext|>"
+    text = example['text']
     return text
 
 
