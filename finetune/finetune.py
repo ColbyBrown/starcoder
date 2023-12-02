@@ -59,7 +59,7 @@ def get_args():
     parser.add_argument("--shuffle_buffer", type=int, default=5000)
 
     #parser.add_argument("--input_column_name", type=str, default="prompt")
-    parser.add_argument("--output_column_name", type=str, default="completion")
+    #parser.add_argument("--output_column_name", type=str, default="completion")
 
     parser.add_argument("--seq_length", type=int, default=2048)
     parser.add_argument("--max_steps", type=int, default=10000)
@@ -148,7 +148,7 @@ class ConstantLengthDataset(IterableDataset):
         num_of_sequences=1024,
         chars_per_token=3.6
         #input_column_name="prompt",
-        output_column_name="completion"
+        #output_column_name="completion"
     ):
         self.tokenizer = tokenizer
         self.concat_token_id = tokenizer.eos_token_id if tokenizer.eos_token_id is not None else args.eos_token_id
@@ -158,7 +158,7 @@ class ConstantLengthDataset(IterableDataset):
         self.current_size = 0
         self.max_buffer_size = seq_length * chars_per_token * num_of_sequences
         #self.input_column_name = input_column_name
-        self.output_column_name = output_column_name
+        #self.output_column_name = output_column_name
 
     def __iter__(self):
         iterator = iter(self.dataset)
