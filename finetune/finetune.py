@@ -123,11 +123,7 @@ def print_trainable_parameters(model):
 
 def prepare_sample_text(example):
     """Prepare the text from a sample of the dataset."""
-    #text = f"Question: {example[input_column_name]}\n\nAnswer: {example[output_column_name]}"
-    if example['type'] == "text":
-        text = f"<|soss|><|sot|>{example['title']}<|eot|><|sost|>{example['selftext']}<|eost|>{example['comments']}<|eoss|><|endoftext|>"
-    else:
-        text = f"<|sols|><|sot|>{example['title']}<|eot|><|sol|>{example['linktext']}<|eol|>{example['comments']}<|eols|><|endoftext|>"
+    text = example['textbook']
     return text
 
 
@@ -196,10 +192,8 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
-    # wish I could move load_dataset outside of this thing
-    dataset = load_dataset(args.dataset_name)
-    train_data = dataset["train"]
-    valid_data = dataset["test"]
+    train_data = load_dataset(args.dataset_name, split='train[:80%]') # first 80% of training data
+    valid_data = load_dataset(args.dataset_name, split='train[-20%:]') # last 20%
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
     chars_per_token = chars_token_ratio(train_data, tokenizer)
@@ -211,8 +205,6 @@ def create_datasets(tokenizer, args):
         infinite=True,
         seq_length=args.seq_length,
         chars_per_token=chars_per_token
-        #input_column_name=args.input_column_name,
-        #output_column_name=args.output_column_name
     )
     valid_dataset = ConstantLengthDataset(
         tokenizer,
@@ -220,8 +212,6 @@ def create_datasets(tokenizer, args):
         infinite=False,
         seq_length=args.seq_length,
         chars_per_token=chars_per_token
-        #input_column_name=args.input_column_name,
-        #output_column_name=args.output_column_name
     )
     return train_dataset, valid_dataset
 
