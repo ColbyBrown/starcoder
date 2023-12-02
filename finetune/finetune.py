@@ -192,8 +192,8 @@ class ConstantLengthDataset(IterableDataset):
 
 
 def create_datasets(tokenizer, args):
-    train_data = load_dataset(args.dataset_name, split='train[:80%]') # first 80% of training data
-    valid_data = load_dataset(args.dataset_name, split='train[-20%:]') # last 20%
+    train_data = load_dataset(args.dataset_name, split='train[:8000]') # first 8k records of training data
+    valid_data = load_dataset(args.dataset_name, split='train[8001:10000]') # last 2k records
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
     chars_per_token = chars_token_ratio(train_data, tokenizer)
