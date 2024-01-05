@@ -124,10 +124,10 @@ def print_trainable_parameters(model):
 def prepare_sample_text(example):
     """Prepare the text from a sample of the dataset."""
     text = f"# {example['title']}\n\n## Summary\n\n{example['summary']}\n\n"
-    if example['glossary']:
+    if example['background']:
         text += "## Background\n\n"
-        for entity in example['glossary']:
-            text += f"### {entity}\n\n{example['glossary'][entity]}\n\n"
+        for entry in example['background']:
+            text += f"### {entry['entity']}\n\n{entry['summary']}\n\n"
     return text
 
 
