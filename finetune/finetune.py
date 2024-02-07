@@ -53,7 +53,7 @@ def get_args():
     parser.add_argument("--model_path", type=str, default="bigcode/large-model")
     parser.add_argument("--dataset_name", type=str, default="HuggingFaceH4/CodeAlpaca_20K")
     parser.add_argument("--subset", type=str)
-    #parser.add_argument("--split", type=str)
+    parser.add_argument("--split", type=str, default='train')
     parser.add_argument("--size_valid_set", type=int, default=10000)
     parser.add_argument("--streaming", action="store_true")
     parser.add_argument("--shuffle_buffer", type=int, default=5000)
@@ -193,9 +193,10 @@ class ConstantLengthDataset(IterableDataset):
 
 def create_datasets(tokenizer, args):
     # wish I could move load_dataset outside of this thing
-    dataset = load_dataset(args.dataset_name)
-    train_data = dataset["train"]
-    valid_data = dataset["test"]
+    #dataset = load_dataset(args.dataset_name)
+    split = args.split
+    train_data = load_dataset(args.dataset_name, split=f'{split}[:80%]').shuffle().flatten_indices()
+    valid_data = load_dataset(args.dataset_name, split=f'{split}[80%:]').shuffle().flatten_indices()
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
     chars_per_token = chars_token_ratio(train_data, tokenizer)
