@@ -198,8 +198,8 @@ class ConstantLengthDataset(IterableDataset):
 def create_datasets(tokenizer, args):
     # wish I could move load_dataset outside of this thing
     dataset = load_dataset(args.dataset_name)
-    train_data = dataset["train"]
-    valid_data = dataset["test"]
+    train_data = dataset["train"].shuffle() # important as we almost never are able to get through the whole thing
+    valid_data = dataset["test"].shuffle() # so repeated trains on the same data should yield continued improvement
     print(f"Size of the train set: {len(train_data)}. Size of the validation set: {len(valid_data)}")
 
     chars_per_token = chars_token_ratio(train_data, tokenizer)
