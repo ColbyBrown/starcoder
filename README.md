@@ -92,8 +92,8 @@ conda install pytorch==1.13.1 torchvision==0.14.1 torchaudio==0.13.1 pytorch-cud
 ```
 Install `transformers` and `peft`
 ```bash
-conda install -c huggingface transformers 
-pip install git+https://github.com/huggingface/peft.git
+conda install -c huggingface transformers
+pip install peft==0.9.0
 ```
 Note that you can install the latest stable version of transformers by using
 
