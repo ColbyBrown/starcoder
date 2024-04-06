@@ -4,7 +4,7 @@ import os
 import torch
 from accelerate import Accelerator
 from datasets import load_dataset
-from peft import LoraConfig, get_peft_model, prepare_model_for_int8_training, set_peft_model_state_dict
+from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, set_peft_model_state_dict
 from torch.utils.data import IterableDataset
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, logging, set_seed
@@ -230,7 +230,7 @@ def run_training(args, train_data, val_data):
         args.model_path,
         use_auth_token=True,
         use_cache=not args.no_gradient_checkpointing,
-        load_in_8bit=True,
+        load_in_4bit=True,
         device_map={"": Accelerator().process_index},
     )
     model = prepare_model_for_int8_training(model)
