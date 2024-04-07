@@ -234,7 +234,7 @@ def run_training(args, train_data, val_data):
         load_in_4bit=True,
         device_map={"": Accelerator().process_index},
     )
-    model = prepare_model_for_int8_training(model)
+    model = prepare_model_for_kbit_training(model)
 
     lora_config = LoraConfig(
         r=args.lora_r,
