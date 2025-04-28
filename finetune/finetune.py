@@ -9,7 +9,7 @@ from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training, se
 from torch.utils.data import IterableDataset
 from tqdm import tqdm
 from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer, Trainer, TrainingArguments, logging, set_seed
-from transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl
+from transformers import TrainerCallback, TrainingArguments, TrainerState, TrainerControl, BitsAndBytesConfig
 from transformers.trainer_utils import PREFIX_CHECKPOINT_DIR
 
 """
@@ -230,11 +230,18 @@ def create_datasets(tokenizer, args):
 def run_training(args, train_data, val_data):
     print("Loading the model")
     # disable caching mechanism when using gradient checkpointing
+    bnb_config = BitsAndBytesConfig(
+    load_in_4bit=True,
+    bnb_4bit_use_double_quant=True,
+    bnb_4bit_quant_type="nf4",
+    bnb_4bit_compute_dtype=torch.float16 # Change to match input type
+    )
+
     model = AutoModelForCausalLM.from_pretrained(
         args.model_path,
         use_auth_token=True,
         use_cache=not args.no_gradient_checkpointing,
-        load_in_4bit=True,
+        quantization_config=bnb_config,
         device_map={"": Accelerator().process_index},
     )
     model = prepare_model_for_kbit_training(model)
