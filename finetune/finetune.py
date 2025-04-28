@@ -124,7 +124,9 @@ def print_trainable_parameters(model):
 
 def prepare_sample_text(example):
     """Prepare the text from a sample of the dataset."""
-    text = example['text']
+    #text = example['text']
+    json_str = {"report": example['report'], "summary": example['summary']}
+    text = json.dumps(json_str, ensure_ascii=False)
     return text
 
 
